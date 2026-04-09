@@ -60,72 +60,86 @@ function App() {
     setPosts(posts.map((post) => (post._id === postId ? res.data : post)));
   };
   return (
-    <div style={{ width: "600px", margin: "auto" }}>
-      <h1>Instagram</h1>
-      <br />
-      <hr />
-      <h2>Create Post</h2>
+    <div className="bg-gray-100 min-h-screen">
+      <div className="bg-white border-b p-4 text-center font-bold text-xl">
+        Instagram
+      </div>
 
-      <input
-        type="text"
-        placeholder="Image url"
-        value={imageUrl}
-        onChange={(e) => setImageUrl(e.target.value)}
-      />
-      <br />
-      <br />
+      <div className="max-w-xl mx-auto bg-white p-4 mt-4 rounded-lg shadow">
+        <h2 className="font-semibold mb-2">Create Post</h2>
 
-      <textarea
-        placeholder="Caption"
-        value={caption}
-        onChange={(e) => setCaption(e.target.value)}
-      />
-      <br />
-      <br />
+        <input
+          type="text"
+          placeholder="Image URL"
+          className="w-full border p-2 mb-2 rounded"
+          value={imageUrl}
+          onChange={(e) => setImageUrl(e.target.value)}
+        />
 
-      <button onClick={handlePost}>Post</button>
+        <textarea
+          placeholder="Write a caption..."
+          className="w-full border p-2 mb-2 rounded"
+          value={caption}
+          onChange={(e) => setCaption(e.target.value)}
+        />
 
-      <hr />
+        <button
+          onClick={handlePost}
+          className="bg-blue-500 text-white px-4 py-2 rounded w-full hover:bg-blue-600"
+        >
+          Post
+        </button>
+      </div>
 
-      <h2>Feed</h2>
+      <div
+        className="max-w-5xl mx-auto mt-6 grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+      >
+        {posts.length === 0 ? (
+          <p className="text-center text-gray-500">No posts available</p>
+        ) : (
+          posts.map((post) => (
+            <div
+              key={post._id}
+              className="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden"
+            >
+              <img
+                src={post.imageUrl}
+                alt="post"
+                className="w-full h-60 object-cover"
+              />
 
-      {posts.length === 0 ? (
-        <p>No posts available.</p>
-      ) : (
-        posts.map((post) => (
-          <div key={post._id} style={{ marginBottom: "30px" }}>
-            <img
-              src={post.imageUrl}
-              alt="post"
-              width="400"
-              height="250"
-              style={{ objectFit: "cover" }}
-            />
+              <div className="p-3">
+                <p className="font-medium text-sm">{post.caption}</p>
 
-            <p>{post.caption}</p>
+                <button
+                  onClick={() => deletePost(post._id)}
+                  className="text-red-500 text-xs mt-1"
+                >
+                  Delete
+                </button>
 
-            <button onClick={() => deletePost(post._id)}>Delete Post</button>
+                <div className="mt-2 text-xs text-gray-600 max-h-20 overflow-y-auto">
+                  {post.comments.map((c, i) => (
+                    <p key={i}>• {c.text}</p>
+                  ))}
+                </div>
 
-            <h4>Comments:</h4>
-            {post.comments.map((c, index) => (
-              <p key={index}>• {c.text}</p>
-            ))}
-
-            <input
-              type="text"
-              placeholder="Add comments"
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  // console.log(e)
-
-                  handleComment(post._id, e.target.value);
-                  e.target.value = "";
-                }
-              }}
-            />
-          </div>
-        ))
-      )}
+                <input
+                  type="text"
+                  placeholder="Add comment..."
+                  className="w-full border mt-2 p-1 rounded text-xs"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleComment(post._id, e.target.value);
+                      e.target.value = "";
+                    }
+                  }}
+                />
+              </div>
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 }
