@@ -1,6 +1,7 @@
 const express = require("express")
 const mongoose = require("mongoose")
 const cors = require("cors")
+const Router = require('./routes/postRoutes')
 const postRoutes = require("./routes/postRoutes")
 
 const app = express()
