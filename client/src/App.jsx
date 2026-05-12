@@ -4,13 +4,15 @@ import "./App.css";
 import axios from "axios";
 import { useEffect } from "react";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function App() {
   const [imageUrl, setImageUrl] = useState("");
   const [caption, setCaption] = useState("");
   const [posts, setPosts] = useState([]);
 
   const fetchPost = async () => {
-    const res = await axios.get("http://localhost:5000/post");
+    const res = await axios.get(`${API_URL}/post`);
     setPosts(res.data);
   };
 
@@ -21,7 +23,7 @@ function App() {
   const handlePost = async () => {
     if (!imageUrl || !caption) return;
 
-    const res = await axios.post("http://localhost:5000/post", {
+    const res = await axios.post(`${API_URL}/post`, {
       imageUrl,
       caption,
     });
@@ -37,7 +39,7 @@ function App() {
   const deletePost = async (postId) => {
     alert("Post deleted Successfully");
     try {
-      await axios.delete(`http://localhost:5000/post/${postId}/deletePost`);
+      await axios.delete(`${API_URL}/post/post/${postId}/deletePost`);
 
       setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
     } catch (err) {
